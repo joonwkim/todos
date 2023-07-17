@@ -40,7 +40,7 @@ const UserTableItem = (props: UserItemProps) => {
                 <tr className='border'>
                     <td colSpan={3}>
                         <div className='ms-5'>
-                            {/* <TodoList todos={props.user.todos} /> */}
+                            <TodoList todos={props.user.todos} />
                         </div>
                     </td>
                 </tr>
