@@ -1,6 +1,5 @@
 'use client'
 import React, { Component } from 'react'
-import { getCategories } from '../services/categoryServices'
 import { Category } from '@prisma/client'
 import { Form } from 'react-bootstrap'
 type CategoryProps ={
