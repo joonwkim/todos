@@ -6,7 +6,16 @@ export async function getUsers() {
         const users = await prisma.user.findMany({
             include: {
                 profile:true,
-                todos: true,
+            todos: {
+                select:{
+                    id:true,
+                    title:true,
+                    desc:true,
+                    isCompleted:true,
+                    user:true,
+                    category:true,
+                }
+            }
             }
         })
         return { users }
@@ -34,6 +43,16 @@ export async function createUser(input: UserType) {
                         picture: true,
                     },
                 },
+                todos:{
+                    select:{
+                        id:true,
+                        title:true,
+                        desc:true,
+                        isCompleted:true,
+                        user:true,
+                        category:true,
+                    }
+                }
             },
         });
         return user
