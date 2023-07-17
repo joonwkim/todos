@@ -1,5 +1,5 @@
 'use client'
-import { Category, User } from '@prisma/client'
+import { Category, Todo, User } from '@prisma/client'
 import { useEffect, useState, useTransition } from 'react'
 import AddPostItemModal from './AddTodoItemModal'
 import TodoList from './TodoList'
@@ -8,6 +8,7 @@ type UserItemProps = {
     user: User,
     isBtnAdded: boolean,
     categories?:Category[] | undefined
+    todos?: Todo[] | undefined
 }
 
 const UserTableItem = (props: UserItemProps) => {
@@ -27,6 +28,7 @@ const UserTableItem = (props: UserItemProps) => {
     const onClick = () => {
         handleShow()
     }
+   
     if (props.isBtnAdded) {
         return (
             <>
@@ -40,7 +42,7 @@ const UserTableItem = (props: UserItemProps) => {
                 <tr className='border'>
                     <td colSpan={3}>
                         <div className='ms-5'>
-                            <TodoList todos={props.user.todos} />
+                            <TodoList todos={props.todos} />
                         </div>
                     </td>
                 </tr>

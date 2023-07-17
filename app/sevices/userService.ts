@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma'
 import { User } from 'next-auth';
+import { getTodos } from './todoService';
 
 export async function getUsers() {
     try {
@@ -18,6 +19,8 @@ export async function getUsers() {
                 },
             }
         })
+      
+        console.log('get users: ', users)
         return { users }
     } catch (error) {
         return ({ error })

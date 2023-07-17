@@ -1,16 +1,19 @@
 'use client'
-import { Category, User } from '@prisma/client'
+import { Category, Todo, User } from '@prisma/client'
 import React, { useState } from 'react'
 import AddNewUser from './addNewUser'
 import UserTableItem from './userTableItem'
 import NRBModal from '@/components/controls/NRBModal'
 import { Button } from 'react-bootstrap'
 import AddNewUserModal from './AddNewUserModal'
+import { array } from 'zod'
 type UsersProps = {
   users: User[] | undefined,
   isBtnAdded: boolean,
-  categories?:Category[] | undefined
+  categories?:Category[] | undefined,
+  todos?:Todo[] | undefined
 }
+
 const AddUserAndList = (props: UsersProps) => {
   const [show, setShow] = useState(false)
   const handleClose = () => setShow(false)
@@ -19,6 +22,12 @@ const AddUserAndList = (props: UsersProps) => {
   const onAddUsrBtnClicked = () => {
     handleShow()
   }
+
+  const getUserTodos = (user:User) =>{
+   var userTodos =  props.todos?.filter(todo =>todo.userId === user.id) as Array<Todo>
+   return userTodos;
+  }
+
 
   return (
     <>
@@ -39,7 +48,7 @@ const AddUserAndList = (props: UsersProps) => {
         </thead>
         <tbody>
           {props.users?.map(user => (
-            <UserTableItem key={user.id} user={user} isBtnAdded={props.isBtnAdded} categories={props.categories} />
+            <UserTableItem key={user.id} user={user} isBtnAdded={props.isBtnAdded} categories={props.categories} todos={getUserTodos(user)} />
           ))}
         </tbody>
       </table>
