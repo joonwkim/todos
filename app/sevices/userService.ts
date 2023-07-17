@@ -20,7 +20,6 @@ export async function getUsers() {
             }
         })
       
-        console.log('get users: ', users)
         return { users }
     } catch (error) {
         return ({ error })

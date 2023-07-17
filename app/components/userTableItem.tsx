@@ -19,16 +19,13 @@ const UserTableItem = (props: UserItemProps) => {
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
 
-    // alert('categories:' + JSON.stringify(props.categories))
-
-    useEffect(() => {
-        console.log('use effect in User Table Item', props)
-    }, [props])
 
     const onClick = () => {
         handleShow()
     }
    
+   
+
     if (props.isBtnAdded) {
         return (
             <>
@@ -42,7 +39,7 @@ const UserTableItem = (props: UserItemProps) => {
                 <tr className='border'>
                     <td colSpan={3}>
                         <div className='ms-5'>
-                            <TodoList todos={props.todos} />
+                            <TodoList todos={props.todos} categories={props.categories} />
                         </div>
                     </td>
                 </tr>

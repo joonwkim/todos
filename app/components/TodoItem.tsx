@@ -11,7 +11,6 @@ type TodoItemProps = {
 
 const TodoItem = (props: TodoItemProps) => {
 
-  const todo = props.todo
   const [isPending, startTransition] = useTransition()
 
   return (

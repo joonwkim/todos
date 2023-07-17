@@ -4,7 +4,7 @@ import { getCategories } from '@/app/sevices/categoryServices'
 import AddUserAndList from '@/app/components/addUserAndList'
 import { getTodos } from '@/sevices/todoService'
 
-const OneToMany = async () => {
+const UsersTodos = async () => {
   const { users } = await getUsers() 
   const {todos } = await getTodos()
   const {categories} = await getCategories()
@@ -19,4 +19,4 @@ const OneToMany = async () => {
   )
 }
 
-export default OneToMany
+export default UsersTodos

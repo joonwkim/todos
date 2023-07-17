@@ -19,17 +19,6 @@ export async function getTodos() {
                 }
             }
         })
-        // const todos = await prisma.todo.findMany({
-        //     include: {
-        //         user:{
-        //             select:{
-        //                 name: true,
-        //                 email:true,
-        //             }
-        //         },
-        //     }
-        // })
-        // console.log('get todos:', todos)
         return {todos}
     } catch (error) {
         return({error})

@@ -15,8 +15,6 @@ export async function createTodoByUserAction(input:TodoInputType){
 }
 
 export async function updateTodoAction(id: string, isCompleted:boolean) {
-    console.log('update todo action id & value:', id, isCompleted)
-   
     await updateTodo(id,isCompleted)
     revalidatePath('/')
     revalidatePath('/oneToMany')
