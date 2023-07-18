@@ -21,7 +21,7 @@ const AddTodoItemModal = (props: TodoModalProps) => {
 
     const [cId, setCId] = useState(null)
 
-    const addTodoAction = async (data: FormData) => {
+    const handleCreateTodoByUser = async (data: FormData) => {
 
         let input: TodoInputType = {
             title: data.get('title') as string,
@@ -40,7 +40,7 @@ const AddTodoItemModal = (props: TodoModalProps) => {
                 <Modal.Title>Add Todo</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <form id='addTodoModal' ref={formRef} action={addTodoAction}>
+                <form id='addTodoModal' ref={formRef} action={handleCreateTodoByUser}>
                     <div className='row'>
                         <div className="form-group row mt-2">
                             <label className='col-2'>Category:</label>

@@ -4,18 +4,19 @@ import { createUserAction } from '../actions/userAction'
 
 const AddNewUser = () : React.JSX.Element=> {
   const formRef = useRef<HTMLFormElement>(null)
-  const action = async (data: FormData) => {
+  
+  const handleAddUser = async (data: FormData) => {
     let input: UserType = {
       name: data.get('name') as string,
       email: data.get('email') as string,
       password: data.get('password') as string,
     }
 
-    await createUserAction(input)
+     await createUserAction(input)
     formRef.current?.reset()
   }
   return (
-    <form ref={formRef} action={action} className='mt-3'>
+    <form ref={formRef} action={handleAddUser} className='mt-3'>
       <div className='row'>
         <div className="form-group row mt-2">
           <label className='col-3'>Name:</label>

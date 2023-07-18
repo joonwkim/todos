@@ -5,17 +5,8 @@ export async function getUsers() {
     try {
         const users = await prisma.user.findMany({
             include: {
-                profile:true,
-            todos: {
-                select:{
-                    id:true,
-                    title:true,
-                    desc:true,
-                    isCompleted:true,
-                    user:true,
-                    category:true,
-                }
-            }
+                profile: true,
+                todos: true,
             }
         })
         return { users }
@@ -28,7 +19,7 @@ export async function createUser(input: UserType) {
         const user = await prisma.user.create({
             data: {
                 email: input.email,
-                name:input.name,
+                name: input.name,
                 password: input.password,
                 profile: {
                     create: {
@@ -43,14 +34,14 @@ export async function createUser(input: UserType) {
                         picture: true,
                     },
                 },
-                todos:{
-                    select:{
-                        id:true,
-                        title:true,
-                        desc:true,
-                        isCompleted:true,
-                        user:true,
-                        category:true,
+                todos: {
+                    select: {
+                        id: true,
+                        title: true,
+                        desc: true,
+                        isCompleted: true,
+                        user: true,
+                        category: true,
                     }
                 }
             },

@@ -1,14 +1,14 @@
-'use client'
 import React, { Component } from 'react'
 import { Category } from '@prisma/client'
 import { Form } from 'react-bootstrap'
+
 type CategoryProps ={
     onChange:any
     categories?:Category[] | undefined
 }
 
 export   const  SelectCategory = (props:CategoryProps) =>{
-   
+
     return (<>
         <div>
             <Form.Control as="select" onChange={props.onChange.bind(this)} >

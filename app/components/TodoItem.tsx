@@ -1,6 +1,6 @@
 'use client'
 import { Category, Todo, User } from '@prisma/client'
-import { ChangeEvent, startTransition, useTransition } from 'react'
+import { useTransition } from 'react'
 import styles from '../page.module.css'
 import { updateTodoAction } from '../actions/todoAction'
 

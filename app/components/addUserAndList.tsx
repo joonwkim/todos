@@ -1,12 +1,9 @@
 'use client'
 import { Category, Todo, User } from '@prisma/client'
 import React, { useState } from 'react'
-import AddNewUser from './addNewUser'
 import UserTableItem from './userTableItem'
-import NRBModal from '@/components/controls/NRBModal'
-import { Button } from 'react-bootstrap'
 import AddNewUserModal from './AddNewUserModal'
-import { array } from 'zod'
+
 type UsersProps = {
   users: User[] | undefined,
   isBtnAdded: boolean,
@@ -27,7 +24,6 @@ const AddUserAndList = (props: UsersProps) => {
    var userTodos =  props.todos?.filter(todo =>todo.userId === user.id) as Array<Todo>
    return userTodos;
   }
-
 
   return (
     <>

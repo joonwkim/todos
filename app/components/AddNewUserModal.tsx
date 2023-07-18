@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
-import { Category } from '@prisma/client'
 import { createUserAction } from '../actions/userAction'
 
 type BtModalProps = {
@@ -17,7 +16,7 @@ type BtModalProps = {
 const AddNewUserModal = (props: BtModalProps) => {
     const formRef = useRef<HTMLFormElement>(null)
 
-    const action = async (data: FormData) => {
+    const handleCreateUser = async (data: FormData) => {
         let input: UserType = {
             name: data.get('name') as string,
             email: data.get('email') as string,
@@ -32,7 +31,7 @@ const AddNewUserModal = (props: BtModalProps) => {
                 <Modal.Title>Add User</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <form id='addNewUserModal' ref={formRef} action={action}>
+                <form id='addNewUserModal' ref={formRef} action={handleCreateUser}>
                     <div className='row'>
                         <div className="form-group row mt-2">
                             <label className='col-3'>Name:</label>
