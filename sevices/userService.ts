@@ -28,22 +28,8 @@ export async function createUser(input: UserType) {
                 },
             },
             include: {
-                profile: {
-                    select: {
-                        id: true,
-                        picture: true,
-                    },
-                },
-                todos: {
-                    select: {
-                        id: true,
-                        title: true,
-                        desc: true,
-                        isCompleted: true,
-                        user: true,
-                        category: true,
-                    }
-                }
+                profile: true,
+                todos: true
             },
         });
         return user
