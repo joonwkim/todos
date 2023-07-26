@@ -21,11 +21,12 @@ const TodoItem = (props: TodoItemProps) => {
           <label htmlFor='{todo.id}' className='ms-2'  >{props.category?.name}</label>
           <label htmlFor='{todo.id}' className='ms-2'  >{props.todo.title} - </label>
           <label htmlFor='{todo.id}' className='ms-2'  >{props.todo.desc}</label>
-          <span className='ms-3'> {props.todo.updatedAt?.toUTCString()} </span>
+          <span className='ms-3'> {props.todo.createdAt?.toLocaleString()} </span>
         </>) : (<>
           <label htmlFor='{todo.id}' className='ms-2 text-decoration-line-through'>{props.todo.title}</label>
           <label htmlFor='{todo.id}' className='ms-2 text-decoration-line-through'  >{props.todo.desc}</label>
-          <span className='ms-3 text-decoration-line-through'>{props.todo.updatedAt?.toUTCString()}          </span>
+          <span className='ms-3 text-decoration-line-through'>created at: {props.todo.createdAt?.toLocaleString()} </span>
+          <span className='ms-3 text-decoration-line-through'>completed at: {props.todo.updatedAt?.toLocaleString()}          </span>
         </>)
       }
     </li>

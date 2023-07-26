@@ -8,23 +8,19 @@ const NewTodo = () => {
         const title = data.get('title')
         if (!title || typeof title !== 'string') return
 
-       await createTodoAction(title)
+        await createTodoAction(title)
 
-       formRef.current?.reset()
+        formRef.current?.reset()
     }
 
     return (
         <form ref={formRef} action={handleCreateTodo} className='mt-3'>
             <div className="fs-5">Create a new Todo</div>
-            <input type="text" title='title' name="title" 
-            className='border border-primary' />
-            <button
-                type='submit'
-                className='btn btn-primary ms-3'  >
-                Add Todo
-            </button>
+            <div className="row ms-1">
+                <input type="text" title='title' name="title" className='border border-primary col-4' />
+                <button type='submit' className='btn btn-primary ms-3 col-1'>Add</button>
+            </div>
         </form>
-
     )
 }
 

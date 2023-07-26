@@ -1,15 +1,11 @@
 'use client'
-import { ChangeEvent, startTransition, useTransition } from 'react'
-import styles from './page.module.css'
 import { Category } from '@prisma/client'
 
 type CategoryItemProps = {
     category: Category,
 }
 
-const TodoItem = (props: CategoryItemProps) => {
-
-    const [isPending, startTransition] = useTransition()
+const CategoryItem = (props: CategoryItemProps) => {
 
     return (
         <li className='list-group-item border-0 p-0'>
@@ -18,4 +14,4 @@ const TodoItem = (props: CategoryItemProps) => {
     )
 }
 
-export default TodoItem
+export default CategoryItem
