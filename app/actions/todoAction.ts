@@ -10,34 +10,20 @@ import { redirect } from "next/navigation"
 export async function createTodoAction(title: string) {
   try {
     const todo = await createTodo(title)
-    // if(!todo){
-    //   console.log('!todo: ',todo)
-    // }
-    // else{
-    //   console.log('todo:',todo)
-    // }
     revalidatePath('/')
   } catch (e: any) {
 
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      // The .code property can be accessed in a type-safe manner
       if (e.code === 'P2002') {
         console.log(
           'There is a unique constraint violation'
         )
-
-        redirect("/?status=error");
+        redirect("/?status=error && code=P2002");
       }
       else{
         throw e
       }
     }
-    // else{
-    //   message = e 
-    // }
-
-    // console.log('todo create error: ', e)
-   
   }
 }
 

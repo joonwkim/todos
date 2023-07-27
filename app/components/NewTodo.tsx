@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from 'react-toastify';
 import { stat } from "fs";
 const NewTodo = () => {
-  
+
   const formRef = useRef<HTMLFormElement>(null)
 
   const handleCreateTodo = async (data: FormData) => {
@@ -27,21 +27,22 @@ const NewTodo = () => {
       formRef.current?.reset()
 
     } catch (e: any) {
-      
-      toast.error('Your job is a duplicate!', {
-        position: "top-center",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-      alert('new todo:' + e)
+      if (JSON.stringify(e).includes('P2002')) {
+        toast.error('Your job is a duplicate!', {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      }
+      else {
+        alert('new todo:' + JSON.stringify(e))
+      }
     }
-
-    // 
   }
 
   return (
