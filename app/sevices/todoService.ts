@@ -1,6 +1,5 @@
 import prisma from '@/lib/prisma'
-import { Todo } from '@prisma/client'
-import { todo } from 'node:test'
+import { Prisma, Todo } from '@prisma/client'
 
 export async function getTodos() {
     try {
@@ -19,7 +18,7 @@ export async function getTodos() {
                 }
             }
         })
-        return {todos}
+        return todos
     } catch (error) {
         return({error})
     }
@@ -28,11 +27,19 @@ export async function getTodos() {
 export async function createTodo(title:string){
     try{
         const todo = await prisma.todo.create({data:{title}})
-        return {todo}
-    }
-    catch(error){
-        return({error})
-    }
+        return todo
+    }catch (e) {
+        // if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        //   // The .code property can be accessed in a type-safe manner
+        //   if (e.code === 'P2002') {
+        //     console.log(
+        //       'There is a unique constraint violation, a new user cannot be created with this email'
+        //     )
+        //   }
+        // }
+        // console.log('todo create error: ', e)
+        throw e
+      }
 }
 
 export async function createTodoByUser(input: TodoInputType){

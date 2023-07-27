@@ -20,7 +20,7 @@ export async function getUsers() {
             }
         })
       
-        return { users }
+        return  users 
     } catch (error) {
         return ({ error })
     }
@@ -39,12 +39,8 @@ export async function createUser(input: UserType) {
                 },
             },
             include: {
-                profile: {
-                    select: {
-                        id: true,
-                        picture: true,
-                    },
-                },
+                profile: true,
+                todos: true
             },
         });
         return user
