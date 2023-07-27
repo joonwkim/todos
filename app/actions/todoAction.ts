@@ -1,10 +1,7 @@
 'use server'
-
 import { revalidatePath } from "next/cache"
 import { createTodo, createTodoByUser, updateTodo } from "../sevices/todoService"
 import { Prisma, Todo } from "@prisma/client"
-import { error } from "console"
-import { PrismaClientValidationError } from "@prisma/client/runtime/library"
 import { redirect } from "next/navigation"
 
 export async function createTodoAction(title: string) {
@@ -15,9 +12,7 @@ export async function createTodoAction(title: string) {
 
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
-        console.log(
-          'There is a unique constraint violation'
-        )
+     
         redirect("/?status=error && code=P2002");
       }
       else{
