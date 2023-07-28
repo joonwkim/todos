@@ -1,8 +1,9 @@
 'use server'
 import { revalidatePath } from "next/cache"
-import { createTodo, createTodoByUser, updateTodo } from "../sevices/todoService"
+import { createTodo, createTodoByUser, updateTodoComplete, updateTodoSelect } from "../sevices/todoService"
 import { Prisma, Todo } from "@prisma/client"
-import { redirect } from "next/navigation"
+import { redirect, useSearchParams } from "next/navigation"
+import router from "next/router"
 
 export async function createTodoAction(title: string) {
   try {
@@ -12,7 +13,6 @@ export async function createTodoAction(title: string) {
 
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
-     
         redirect("/?status=error && code=P2002");
       }
       else{
@@ -22,13 +22,29 @@ export async function createTodoAction(title: string) {
   }
 }
 
+
 export async function createTodoByUserAction(input: TodoInputType) {
   await createTodoByUser(input)
   revalidatePath('/oneToMany')
 }
 
-export async function updateTodoAction(id: string, isCompleted: boolean) {
-  await updateTodo(id, isCompleted)
+export async function updateTodoCompleteAction(id: string, isCompleted: boolean) {
+  await updateTodoComplete(id, isCompleted)
   revalidatePath('/')
   revalidatePath('/oneToMany')
 }
+
+export async function updateTodoSelectAction(id: string, isSelected: boolean) {
+  console.log('updateTodoSelectAction', isSelected)
+  await updateTodoSelect(id, isSelected)
+  revalidatePath('/')
+  // revalidatePath('/oneToMany')
+}
+
+export async function setCheckedOnCompleteAction(checked:boolean){
+  // const searchParams = useSearchParams()
+  // redirect(`/?checked =${checked}`)
+  revalidatePath('/')
+    // router.push(`/?checked =${checked}`)
+}
+

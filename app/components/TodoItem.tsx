@@ -2,7 +2,7 @@
 import { Category, Todo, User } from '@prisma/client'
 import { useTransition } from 'react'
 import styles from '../page.module.css'
-import { updateTodoAction } from '../actions/todoAction'
+import { updateTodoCompleteAction } from '../actions/todoAction'
 
 type TodoItemProps = {
   todo: Todo,
@@ -15,7 +15,7 @@ const TodoItem = (props: TodoItemProps) => {
 
   return (
     <li className='list-group-item border-0 p-0'>
-      <input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted' id={props.todo.id} onChange={(e) => startTransition(() => updateTodoAction(props.todo.id, e.target.checked))} defaultChecked={props.todo.isCompleted} />
+      <input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted' id={props.todo.id} onChange={(e) => startTransition(() => updateTodoCompleteAction(props.todo.id, e.target.checked))} defaultChecked={props.todo.isCompleted} />
       {!props.todo.isCompleted ?
         (<>
           <label htmlFor='{todo.id}' className='ms-2'  >{props.category?.name}</label>

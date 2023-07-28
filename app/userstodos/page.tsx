@@ -1,12 +1,12 @@
 import React from 'react'
-import { getUsers } from '../../sevices/userService'
+import { getUsers } from '../sevices/userService'
 import { getCategories } from '@/app/sevices/categoryServices'
 import AddUserAndList from '@/app/components/addUserAndList'
-import { getTodos } from '@/sevices/todoService'
+import { getTodos } from '../sevices/todoService'
 
 const UsersTodos = async () => {
-  const { users } = await getUsers() 
-  const {todos } = await getTodos()
+  const {users}  = await getUsers() 
+  const {todos}  = await getTodos()
   const {categories} = await getCategories()
   
   return (

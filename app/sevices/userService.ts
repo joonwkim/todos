@@ -20,7 +20,7 @@ export async function getUsers() {
             }
         })
       
-        return  users 
+        return  {users} 
     } catch (error) {
         return ({ error })
     }
