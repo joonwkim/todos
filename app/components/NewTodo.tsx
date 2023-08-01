@@ -1,58 +1,128 @@
 'use client'
-import { useRef } from "react"
-import { createTodoAction } from "../actions/todoAction"
-import { useCallback, useEffect } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react"
+import { createChildTodoAction, createTodoAction, deleteSelectedAction, unselectAllTodoAction } from "../actions/todoAction"
 import { toast } from 'react-toastify';
-import { stat } from "fs";
-const NewTodo = () => {
 
-  const formRef = useRef<HTMLFormElement>(null)
+type TodoProps = {
+  selectedItems: any
+}
 
-  const handleCreateTodo = async (data: FormData) => {
-    const title = data.get('title')
-    if (!title || typeof title !== 'string') return
-    try {
-      await createTodoAction(title)
-      toast.success('Your job is registered!', {
-        position: "top-center",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-      formRef.current?.reset()
+const NewTodo = (props: TodoProps) => {
 
-    } catch (e: any) {
-      if (JSON.stringify(e).includes('P2002')) {
-        toast.error('Your job is a duplicate!', {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        })
+  const [title, setTitle] = useState('')
+  const [isValid, SetValid] = useState(false)
+
+  const toastSuccess = (msg: string) => {
+    toast.success(msg, {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
+  }
+  const toastError = (msg: string) => {
+    toast.error(msg, {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
+  }
+
+  const checkEntryValid = () => {
+    if (!title || typeof title !== 'string' || title === '') {
+      SetValid(false)
+      toastError('Please enter todo!')
+      return;
+    }
+
+  }
+
+  const handleAddTodo = async (e: any) => {
+    checkEntryValid();
+    if (!isValid) {
+      try {
+        await createTodoAction(title)
+        toastSuccess('Your job is registered!');
+
+      } catch (e: any) {
+        if (JSON.stringify(e).includes('P2002')) {
+          toastError('Your job is a duplicate!')
+        }
+        else {
+          toastError(JSON.stringify(e))
+        }
       }
-      else {
-        alert('new todo:' + JSON.stringify(e))
-      }
+    }
+    else {
+      toast.error('Check!, your entry is not saved')
     }
   }
 
+  const handleAddChild = async (e: any) => {
+
+    checkEntryValid();
+    if (!isValid) {
+      try {
+        if (props.selectedItems?.length > 1) {
+          toast.info('Please select one item only')
+          return;
+        }
+        else {
+          await createChildTodoAction(props.selectedItems[0], title)
+          toastSuccess('Your job is registered!');
+          setTitle('')
+          SetValid(false)
+        }
+      } catch (e: any) {
+        if (JSON.stringify(e).includes('P2002')) {
+          toastError('Your job is a duplicate!')
+        }
+        else {
+          toastError(JSON.stringify(e))
+        }
+      }
+    }
+    else {
+      toast.error('Check!, your entry is not saved')
+    }
+  }
+
+  const handleUnselectAll = async () => {
+    // toast.info('Unselect All clicked')
+    await unselectAllTodoAction()
+  }
+
+  const handleDeleteSelected = async () => {
+    // toast.info('Unselect All clicked')
+    await deleteSelectedAction()
+  }
+
   return (
-    <form ref={formRef} action={handleCreateTodo} className='mt-3'>
+    <>
       <div className="fs-5">Create a new Todo</div>
-      <div className="row ms-1">
-        <input type="text" title='title' name="title" className='border border-primary col-4' />
-        <button type='submit' className='btn btn-primary ms-3 col-1'>Add</button>
+      <div className="row">
+
+        <input type="text" title='title' name="title" value={title} onChange={(e) => setTitle(e.target.value)} className='ms-3 border border-primary col-4' />
+        <div className="d-flex col-6">
+          <button onClick={handleAddTodo} type='button' className='btn btn-primary'>Add</button>
+          <button type='button' className='btn btn-primary ms-1' onClick={handleAddChild}>Add Child</button>
+          <button type='button' className='btn btn-primary ms-1' onClick={handleUnselectAll}>Unselect All</button>
+          <button type='button' className='btn btn-danger ms-1' onClick={handleDeleteSelected}>Delete Selected</button>
+        </div>
       </div>
-    </form>
+
+    </>
+
+
   )
 }
 

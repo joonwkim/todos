@@ -39,6 +39,11 @@ model Todo {
   userId      String?   @db.ObjectId
   categoryId  String?   @db.ObjectId
   category    Category? @relation(fields: [categoryId], references: [id])
+
+  parentId String?   @db.ObjectId
+  parent   Todo? @relation("TodoTodo", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  children Todo[] @relation("TodoTodo")
 }
 
 model Category {

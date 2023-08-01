@@ -29,11 +29,11 @@ const Header = () => {
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
+          {/* <Nav className="ms-auto">
             <Nav.Link href="/">Todos</Nav.Link>
             <Nav.Link href="/categories">Categories</Nav.Link>
             <Nav.Link href="/userstodos">User and Todos</Nav.Link>
-          </Nav>
+          </Nav> */}
         </Navbar.Collapse>
       </Container>
     </Navbar>
