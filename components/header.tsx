@@ -23,7 +23,7 @@ const Header = () => {
   return (
     <Navbar bg="dark" variant='dark' expand="lg" collapseOnSelect>
       <Container>
-        <Navbar.Brand href="https://https://amiailab.vercel.app/">
+        <Navbar.Brand href="https://amiailab.vercel.app/">
           {'AmiAiLab '}
         </Navbar.Brand>
 
