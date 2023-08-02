@@ -7,7 +7,7 @@ type TodoProps = {
   selectedItems: any
 }
 
-const NewTodo = (props: TodoProps) => {
+const AddNewTodo = (props: TodoProps) => {
 
   const [title, setTitle] = useState('')
   const [isValid, SetValid] = useState(false)
@@ -126,4 +126,4 @@ const NewTodo = (props: TodoProps) => {
   )
 }
 
-export default NewTodo
+export default AddNewTodo

@@ -2,7 +2,6 @@
 import { Category, Todo, User } from '@prisma/client'
 import { useEffect, useState, useTransition } from 'react'
 import AddPostItemModal from './AddTodoItemModal'
-import TodoList from './TodoList'
 
 type UserItemProps = {
     user: User,
@@ -39,7 +38,7 @@ const UserTableItem = (props: UserItemProps) => {
                 <tr className='border'>
                     <td colSpan={3}>
                         <div className='ms-5'>
-                            <TodoList todos={props.todos} categories={props.categories} />
+                            {/* <TodoList todos={props.todos} categories={props.categories} /> */}
                         </div>
                     </td>
                 </tr>
