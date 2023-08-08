@@ -111,6 +111,7 @@ export async function deleteSelectedAction() {
 
     await deleteSelected();
 
+    revalidatePath('/')
     revalidatePath('/todos')
   } catch (e: any) {
 

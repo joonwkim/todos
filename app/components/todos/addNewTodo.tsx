@@ -3,6 +3,7 @@ import { startTransition, useState } from "react"
 import { createChildTodoAction, createTodoAction, deleteSelectedAction, unselectAllTodoAction, updateTodoExpandAction } from "../../actions/todoAction"
 import { toast } from 'react-toastify';
 import { Todo } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 type TodoProps = {
   todos: Array<Todo>,
@@ -15,6 +16,7 @@ const AddNewTodo = (props: TodoProps) => {
   const [title, setTitle] = useState('')
   const [isValid, SetValid] = useState(false)
   const [isExpanded, setExpand] = useState(false)
+  const router = useRouter()
 
   const toastSuccess = (msg: string) => {
     toast.success(msg, {
@@ -121,8 +123,8 @@ const AddNewTodo = (props: TodoProps) => {
       const result = confirm('선택된 항목을 삭제합니다.')
       if (result) {
         startTransition(() => { deleteSelectedAction()})
-        setExpand(false);
-        handleExpandAll()
+       
+        router.push('/todos/?orderBy=asc&&propertyName=title');
       }
     }
   }
@@ -146,7 +148,7 @@ const AddNewTodo = (props: TodoProps) => {
           <button type='button' className='btn btn-primary ms-1' onClick={handleAddChild}>Add Child</button>
           <button type='button' className='btn btn-info ms-1' onClick={handleExpandAll}>{isExpanded ? (<span>Collaps</span>) : (<span>Expand</span>)}</button>
           <button type='button' className='btn btn-info ms-1' onClick={handleUnselectAll}>Unselect</button>
-          {/* <button type='button' className='btn btn-danger ms-1' onClick={handleDeleteSelected}>Delete</button> */}
+          <button type='button' className='btn btn-danger ms-1' onClick={handleDeleteSelected}>Delete</button>
         </div>
       </div>
 
