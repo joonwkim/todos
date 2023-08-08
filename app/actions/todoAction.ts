@@ -87,17 +87,17 @@ export async function updateTodoCompleteAction(selectedTodo: Todo, isCompleted: 
       }
     }
   }
-  revalidatePath('/')
+  revalidatePath('/todos')
 }
 
 export async function updateTodoSelectAction(id: string, isSelected: boolean) {
   await updateTodoSelect(id, isSelected)
-  revalidatePath('/')
+  revalidatePath('/todos/')
 }
 
 export async function updateTodoExpandAction(id: string, isExpanded: boolean) {
   await updateTodoExpand(id, isExpanded)
-  revalidatePath('/')
+  revalidatePath('/todos')
 }
 
 export async function unselectAllTodoAction() {
