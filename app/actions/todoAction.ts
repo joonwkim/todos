@@ -1,5 +1,5 @@
 'use server'
-import { createChildTodo, createTodo, createTodoByUser, deleteSelected, getParentTodo, unselectAllTodo, updateParentTodo, updateTodoComplete, updateTodoExpand, updateTodoSelect, updateTodoSelectAndResetRelation } from "../sevices/todoService"
+import { createChildTodo, createTodo, createTodoByUser, deleteSelected, getParentTodo, setParentDisconnected, unselectAllTodo, updateParentTodo, updateTodoComplete, updateTodoExpand, updateTodoSelect, updateTodoSelectAndResetRelation } from "../sevices/todoService"
 import { Prisma, Todo } from "@prisma/client"
 import { revalidatePath } from "next/cache";
 import { redirect, } from "next/navigation";
@@ -12,7 +12,7 @@ export async function createTodoAction(title: string) {
 
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
-        redirect("/?status=error && code=P2002");
+        redirect("/todos/?status=error && code=P2002");
       }
       else {
         throw e
@@ -35,7 +35,7 @@ export async function createChildTodoAction(parentTodo: any, title: string) {
 
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
-        redirect("/?status=error && code=P2002");
+        redirect("/todos/?status=error && code=P2002");
       }
       else {
         throw e
@@ -51,7 +51,7 @@ export async function resetParentChildTodoAction(parentTodo: any, childId: strin
   } catch (e: any) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
-        redirect("/?status=error && code=P2002");
+        redirect("/todos/?status=error && code=P2002");
       }
       else {
         throw e
@@ -76,14 +76,14 @@ const isAllChildrenCompleted = (parent: any) => {
   return result;
 }
 export async function updateTodoCompleteAction(selectedTodo: Todo, isCompleted: boolean) {
-  await updateTodoComplete(selectedTodo.id, isCompleted)
+  await updateTodoComplete(selectedTodo, isCompleted)
   const parent = await getParentTodo(selectedTodo) as Todo
   if (parent) {
     if (!isCompleted) {
-      await updateTodoComplete(parent.id, isCompleted)
+      await updateTodoComplete(parent, isCompleted)
     } else {
       if (isAllChildrenCompleted(parent)) {
-        await updateTodoComplete(parent.id, true)
+        await updateTodoComplete(parent, true)
       }
     }
   }
@@ -107,16 +107,16 @@ export async function unselectAllTodoAction() {
 
 export async function deleteSelectedAction() {
   try {
-    await deleteSelected()
+    await setParentDisconnected()
 
     await deleteSelected();
 
-    revalidatePath('/')
+    revalidatePath('/todos')
   } catch (e: any) {
 
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
-        redirect("/?status=error && code=P2002");
+        redirect("/todos/?status=error && code=P2002");
       }
       else {
         throw e

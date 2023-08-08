@@ -121,11 +121,8 @@ const AddNewTodo = (props: TodoProps) => {
       const result = confirm('선택된 항목을 삭제합니다.')
       if (result) {
         startTransition(() => { deleteSelectedAction()})
-        // await deleteSelectedAction()
-        setExpand(true);
+        setExpand(false);
         handleExpandAll()
-        // router.push('/')
-        // alert('handle delete: ' + JSON.stringify(props.selectedItems, null, 2))
       }
     }
   }
@@ -149,7 +146,7 @@ const AddNewTodo = (props: TodoProps) => {
           <button type='button' className='btn btn-primary ms-1' onClick={handleAddChild}>Add Child</button>
           <button type='button' className='btn btn-info ms-1' onClick={handleExpandAll}>{isExpanded ? (<span>Collaps</span>) : (<span>Expand</span>)}</button>
           <button type='button' className='btn btn-info ms-1' onClick={handleUnselectAll}>Unselect</button>
-          <button type='button' className='btn btn-danger ms-1' onClick={handleDeleteSelected}>Delete</button>
+          {/* <button type='button' className='btn btn-danger ms-1' onClick={handleDeleteSelected}>Delete</button> */}
         </div>
       </div>
 

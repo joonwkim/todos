@@ -1,22 +1,12 @@
 import { Todo } from '@prisma/client'
-import { getRootTodosOrderBy, getTodoSelected, } from './sevices/todoService'
-import TodoTable from './components/todos/todoTable'
+import Link from 'next/link'
 
-export default async function Home({ searchParams }: {
-  searchParams: {
-    checked: string,
-    orderBy: string,
-    propertyName: string,
-  }
-}) {
-  const todos = await getRootTodosOrderBy(searchParams.checked, searchParams.orderBy, searchParams.propertyName) as Array<Todo>
-  const selectedTodos = await getTodoSelected() as Array<Todo>
+export default async function Home() {
+
 
   return (
     <section className='py-20'>
-      <div className="mt-3">
-        <TodoTable todos={todos} selectedItems={selectedTodos} />
-      </div>
+     <Link href="/todos" >Todos</Link>
     </section>
   )
 }

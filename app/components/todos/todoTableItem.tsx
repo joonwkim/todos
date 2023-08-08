@@ -1,7 +1,7 @@
 'use client'
 import { Todo, } from '@prisma/client'
 import styles from '../../page.module.css'
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { updateTodoCompleteAction, updateTodoExpandAction, updateTodoSelectAction } from '../../actions/todoAction'
 import Expander from '../controls/expander';
 import ChildTableItem from './todoChildren';
@@ -17,6 +17,12 @@ type TodoItemProps = {
 const TodoTableItem = (props: TodoItemProps) => {
 
     const [isPending, startTransition] = useTransition()
+    const [selectStatus, setSelectStatus] = useState(false);
+
+    useEffect(()=>{
+        window.addEventListener("click", () =>setSelectStatus(false))
+        return () => window.removeEventListener("click", () =>setSelectStatus(false))
+    },[])
 
     const getBgColor = () => {
         if (props.todo.isCompleted && props.todo.isSelected !== true) {
@@ -62,14 +68,18 @@ const TodoTableItem = (props: TodoItemProps) => {
             <td>
                 {hasChildren(props.todo) ? (<span onClick={onExpand}><Expander isExpand={props.todo.isExpanded} /></span>) : hasParent(props.todo) ? <div></div> : (
                     <input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted'
-                        onChange={(e) => startTransition(() => updateTodoCompleteAction(props.todo, e.target.checked))}
+                        onChange={(e) => startTransition(() => 
+                            updateTodoCompleteAction(props.todo, e.target.checked))}
                         defaultChecked={props.todo.isCompleted} />
 
                 )}
             </td>
             <td>
                 {hasParent(props.todo) ? <div> <input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted'
-                    onChange={(e) => startTransition(() => updateTodoCompleteAction(props.todo, e.target.checked))}
+                    onChange={(e) => startTransition(() => {
+                        e.stopPropagation();
+                        updateTodoCompleteAction(props.todo, e.target.checked)
+                    })}
                     defaultChecked={props.todo.isCompleted} /></div> : <div></div>}
 
             </td>

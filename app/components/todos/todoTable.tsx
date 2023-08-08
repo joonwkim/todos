@@ -30,9 +30,9 @@ const TodoTable = (props: TodoProps) => {
     const handleChecked = async () => {
         setChecked(!checked)
         if (checked)
-            router.push('/?checked=true')
+            router.push('/todos/?checked=true')
         else
-            router.push('/?checked=false')
+            router.push('/todos/?checked=false')
     }
 
     const handleOrderByTitle = () => {
@@ -41,11 +41,11 @@ const TodoTable = (props: TodoProps) => {
         }
         else if (orderByTitle.status === 'asc') {
             setOrderByTitle({ status: 'desc' });
-            router.push('/?orderBy=desc&&propertyName=title');
+            router.push('/todos/?orderBy=desc&&propertyName=title');
         }
         else if (orderByTitle.status === 'desc') {
             setOrderByTitle({ status: 'asc' });
-            router.push('/?orderBy=asc&&propertyName=title');
+            router.push('/todos/?orderBy=asc&&propertyName=title');
         }
     }
     
@@ -55,11 +55,11 @@ const TodoTable = (props: TodoProps) => {
         }
         else if (orderByCreate.status === 'asc') {
             setOrderByCreated({ status: 'desc' });
-            router.push('/?orderBy=desc&&propertyName=createdAt');
+            router.push('/todos/?orderBy=desc&&propertyName=createdAt');
         }
         else if (orderByCreate.status === 'desc') {
             setOrderByCreated({ status: 'asc' });
-            router.push('/?orderBy=asc&&propertyName=createdAt');
+            router.push('/todos/?orderBy=asc&&propertyName=createdAt');
         }
     }
 
