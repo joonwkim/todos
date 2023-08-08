@@ -2,17 +2,16 @@
 import React, { useRef } from 'react'
 import { createUserAction } from '../actions/userAction'
 
-const AddNewUser = () : React.JSX.Element=> {
+const AddNewUser = (): React.JSX.Element => {
   const formRef = useRef<HTMLFormElement>(null)
-  
+
   const handleAddUser = async (data: FormData) => {
     let input: UserType = {
       name: data.get('name') as string,
       email: data.get('email') as string,
       password: data.get('password') as string,
     }
-
-     await createUserAction(input)
+    await createUserAction(input)
     formRef.current?.reset()
   }
   return (
@@ -36,5 +35,3 @@ const AddNewUser = () : React.JSX.Element=> {
 }
 
 export default AddNewUser
-
-

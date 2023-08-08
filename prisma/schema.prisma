@@ -11,9 +11,29 @@ model Profile {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   picture   String?
   user      User     @relation(fields: [userId], references: [id])
-  userId    String   @unique @db.ObjectId // relation scalar field (used in the `@relation` attribute above)
+  userId    String   @unique @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Todo {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String    @unique
+  desc        String?
+  isCompleted Boolean   @default(false)
+  isSelected  Boolean   @default(false)
+  isExpanded  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      String?   @db.ObjectId
+  categoryId  String?   @db.ObjectId
+  category    Category? @relation(fields: [categoryId], references: [id])
+
+  parentId String? @db.ObjectId
+  parent   Todo?   @relation("TodoTodo", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  children Todo[] @relation("TodoTodo")
 }
 
 model User {
@@ -25,25 +45,6 @@ model User {
   profile   Profile?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Todo {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  title       String    @unique
-  desc        String?
-  isCompleted Boolean   @default(false)
-  isSelected  Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  user        User?     @relation(fields: [userId], references: [id])
-  userId      String?   @db.ObjectId
-  categoryId  String?   @db.ObjectId
-  category    Category? @relation(fields: [categoryId], references: [id])
-
-  parentId String?   @db.ObjectId
-  parent   Todo? @relation("TodoTodo", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  children Todo[] @relation("TodoTodo")
 }
 
 model Category {

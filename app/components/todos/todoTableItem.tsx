@@ -1,10 +1,10 @@
 'use client'
 import { Todo, } from '@prisma/client'
-import styles from '../page.module.css'
+import styles from '../../page.module.css'
 import { useState, useTransition } from 'react';
-import { updateTodoCompleteAction, updateTodoSelectAction } from '../actions/todoAction'
-import Expander from './controls/expander';
-import ChildTableItem from './todosTable';
+import { updateTodoCompleteAction, updateTodoExpandAction, updateTodoSelectAction } from '../../actions/todoAction'
+import Expander from '../controls/expander';
+import ChildTableItem from './todoChildren';
 type Temp = {
     id: string,
     title: string,
@@ -17,7 +17,6 @@ type TodoItemProps = {
 const TodoTableItem = (props: TodoItemProps) => {
 
     const [isPending, startTransition] = useTransition()
-    const [isExpanded, setIsExpanded] = useState(false)
 
     const getBgColor = () => {
         if (props.todo.isCompleted && props.todo.isSelected !== true) {
@@ -47,59 +46,38 @@ const TodoTableItem = (props: TodoItemProps) => {
         return getChildren(todo.children) && getChildren(todo.children).length > 0
     }
 
-    const onExpand = () => {
-        setIsExpanded(!isExpanded)
+    const onExpand = (e: any) => {
+        e.preventDefault()
+        e.stopPropagation();
+        startTransition(() => updateTodoExpandAction(props.todo.id, !props.todo.isExpanded))
+
     }
     const hasParent = (todo: any) => {
-        // getUpdatedAt(todo)
         return todo.parent !== null;
     }
-
- 
-    // const getUpdatedAt = (todo:any) =>{
-    //     const children = getChildren(todo) as Array<Todo>
-    //     console.log('children:' ,JSON.stringify(children,null,2))
-    //     console.log('children array:' ,children)
-    //     // if(children){
-    //     //     let result = children.map(({updatedAt})=> updatedAt)
-    //     //     console.log('result:' ,JSON.stringify(result,null,2))
-    //     // }
-       
-    // }
-
-    // const getMaxOfChild = (todo:any) =>{
-    //     const children = getChildren(todo);
-    //     const ld = new Date(Math.max(children?.map(e=> new Date(e.updatedAt))))
-    // }
-
-    // const getLatestUpdatedDateOfChidren = (todo:any) =>{
-    //     console.log('getLatestUpdatedDateOfChidren : ', todo)
-    //     return ''
-    // }
 
     return (<>
 
         <tr className={getBgColor()} onClick={(e) => handleSelection(e)} >
             <td>
-                {hasChildren(props.todo) ? (<span onClick={onExpand}><Expander isExpand={isExpanded} /></span>) : hasParent(props.todo) ? <div></div> : (
-                    <input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted' 
+                {hasChildren(props.todo) ? (<span onClick={onExpand}><Expander isExpand={props.todo.isExpanded} /></span>) : hasParent(props.todo) ? <div></div> : (
+                    <input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted'
                         onChange={(e) => startTransition(() => updateTodoCompleteAction(props.todo, e.target.checked))}
                         defaultChecked={props.todo.isCompleted} />
 
                 )}
             </td>
             <td>
-                {hasParent(props.todo) ? <div> <input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted' 
+                {hasParent(props.todo) ? <div> <input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted'
                     onChange={(e) => startTransition(() => updateTodoCompleteAction(props.todo, e.target.checked))}
                     defaultChecked={props.todo.isCompleted} /></div> : <div></div>}
 
             </td>
             <td> <label htmlFor='{todo.id}' className={getTitleTextClass()}>{props.todo.title}</label></td>
             <td>{props.todo.createdAt?.toLocaleString()}</td>
-            <td>{!hasChildren(props.todo) && props.todo.isCompleted ? (<>{props.todo.updatedAt.toLocaleString()}</>): !props.todo.isCompleted ? (<div></div>) : (<>{props.todo.updatedAt.toLocaleString()}</>)}</td>
-            {/* <td>{props.todo.updatedAt.toLocaleString()}</td> */}
+            <td>{!hasChildren(props.todo) && props.todo.isCompleted ? (<>{props.todo.updatedAt.toLocaleString()}</>) : !props.todo.isCompleted ? (<div></div>) : (<>{props.todo.updatedAt.toLocaleString()}</>)}</td>
         </tr>
-        {isExpanded && hasChildren(props.todo) ? (<ChildTableItem todo={props.todo} />) : (<div></div>)}
+        {props.todo.isExpanded && hasChildren(props.todo) ? (<ChildTableItem todo={props.todo} />) : (<div></div>)}
     </>
     )
 }

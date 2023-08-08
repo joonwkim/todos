@@ -1,14 +1,18 @@
 'use client'
 import React, { startTransition, useEffect, useState } from 'react'
 import TodoTableItem from './todoTableItem'
-import styles from '../page.module.css'
+import styles from '../../page.module.css'
 import { Todo } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { isDataView } from 'node:util/types'
+import AddNewTodo from './addNewTodo'
+import { Prosto_One } from 'next/font/google'
+import { GetResult } from '@prisma/client/runtime/library'
 
 type TodoProps = {
-    todos: Todo[] | undefined,
+    todos: Array<Todo>,
+    selectedItems: any
 }
 
 interface IOrderByStatus {
@@ -44,6 +48,7 @@ const TodoTable = (props: TodoProps) => {
             router.push('/?orderBy=asc&&propertyName=title');
         }
     }
+    
     const handleOrderByCreatedAt = () => {
         if (orderByCreate.status === 'none') {
             setOrderByCreated({ status: 'asc' });
@@ -59,6 +64,9 @@ const TodoTable = (props: TodoProps) => {
     }
 
     return (<>
+        <h1>Todos</h1>
+        <AddNewTodo todos={props.todos} selectedItems={props.selectedItems} />
+        <p className='text-xl font-semibold border-b pb-2'><span className='fs-6'>-  check in the box when complete</span></p>
         <table className="table">
             <thead>
                 <tr>
@@ -109,9 +117,7 @@ const TodoTable = (props: TodoProps) => {
                 ))}
             </tbody>
         </table>
-    </>
-
-    )
+    </>)
 }
 
 export default TodoTable

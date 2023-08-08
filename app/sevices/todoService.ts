@@ -57,6 +57,19 @@ export async function getRootTodos() {
         return ({ error })
     }
 }
+export async function getItemsSelected() {
+    try {
+        const todos = await prisma.todo.findMany({
+            where: {
+                isSelected: true,
+            }
+        })
+        return { todos };
+
+    } catch (error) {
+        return ({ error })
+    }
+}
 export async function getRootTodosChecked() {
     try {
         const todos = await prisma.todo.findMany({
@@ -84,7 +97,7 @@ export async function getRootTodosChecked() {
                 }
             }
         })
-         
+
         return todos
     } catch (error) {
         return ({ error })
@@ -96,7 +109,7 @@ export async function getRootTodosOrderByDesc() {
             where: {
                 parent: null,
             },
-            orderBy:{
+            orderBy: {
                 createdAt: 'desc'
             },
             include: {
@@ -130,7 +143,7 @@ export async function getRootTodosOrderByTitleDesc() {
             where: {
                 parent: null,
             },
-            orderBy:{
+            orderBy: {
                 title: 'desc'
             },
             include: {
@@ -164,7 +177,7 @@ export async function getRootTodosOrderByAsc() {
             where: {
                 parent: null,
             },
-            orderBy:{
+            orderBy: {
                 createdAt: 'asc'
             },
             include: {
@@ -187,7 +200,7 @@ export async function getRootTodosOrderByAsc() {
                 }
             }
         })
-        console.log('service todos:', JSON.stringify(todos,null,2))
+        console.log('service todos:', JSON.stringify(todos, null, 2))
         return todos
     } catch (error) {
         return ({ error })
@@ -199,7 +212,7 @@ export async function getRootTodosOrderByTitleAsc() {
             where: {
                 parent: null,
             },
-            orderBy:{
+            orderBy: {
                 title: 'asc'
             },
             include: {
@@ -228,35 +241,52 @@ export async function getRootTodosOrderByTitleAsc() {
     }
 }
 
-export async function getRootTodosOrderBy(checked:any, orderBy:string, propertyName:string) {
+export async function getTodoSelected() {
+    const todos = await prisma.todo.findMany({
+        where: {
+            isSelected: true,
+            // NOT:{
+            //     parentId: null,
+            // }
+        },
+        include: {
+            children: true,
+        }
+    })
+
+    // console.log('getTodoSelected', todos)
+    return todos;
+}
+
+export async function getRootTodosOrderBy(checked: any, orderBy: string, propertyName: string) {
     try {
 
-        console.log('getRootTodosOrderBy:', checked, orderBy, propertyName)
-       
-        if(checked==='true' && !orderBy){
+        // console.log('getRootTodosOrderBy:', checked, orderBy, propertyName)
+
+        if (checked === 'true' && !orderBy) {
             return getRootTodosChecked()
         }
-        else{
-            if(orderBy === 'desc' && propertyName ==="createdAt"){
+        else {
+            if (orderBy === 'desc' && propertyName === "createdAt") {
                 return getRootTodosOrderByDesc();
             }
-            else if(orderBy === 'asc' && propertyName ==="createdAt"){
+            else if (orderBy === 'asc' && propertyName === "createdAt") {
                 return getRootTodosOrderByAsc();
             }
-            else{
-                if(orderBy === 'desc' && propertyName ==="title"){
+            else {
+                if (orderBy === 'desc' && propertyName === "title") {
                     return getRootTodosOrderByTitleDesc();
                 }
-                else if(orderBy === 'asc' && propertyName ==="title"){
+                else if (orderBy === 'asc' && propertyName === "title") {
                     return getRootTodosOrderByTitleAsc();
                 }
                 return getRootTodos();
             }
-          
+
         }
-        
-        
-       
+
+
+
         // const todos = await prisma.todo.findMany({
         //     where: {
         //         parent: null,
@@ -420,6 +450,7 @@ export async function updateParentTodo(parentTodo: Todo, isCompleted: boolean) {
             },
             data: {
                 isCompleted: isCompleted,
+                isExpanded: true,
             },
             include: {
                 children: {
@@ -435,7 +466,6 @@ export async function updateParentTodo(parentTodo: Todo, isCompleted: boolean) {
     }
 }
 
-
 export async function createTodoByUser(input: TodoInputType) {
     try {
         const todo = await prisma.todo.create({ data: input, include: { user: true, category: true } })
@@ -448,7 +478,7 @@ export async function createTodoByUser(input: TodoInputType) {
 
 export async function updateTodoComplete(id: string, isCompleted: boolean) {
     try {
-        const todo = await prisma.todo.update({ where: { id }, data: { isCompleted } })
+        const todo = await prisma.todo.update({ where: { id }, data: { isCompleted:isCompleted } })
         return { todo }
     } catch (error) {
         return ({ error })
@@ -457,7 +487,39 @@ export async function updateTodoComplete(id: string, isCompleted: boolean) {
 
 export async function updateTodoSelect(id: string, isSelected: boolean) {
     try {
-        const res = await prisma.todo.update({ where: { id }, data: { isSelected } })
+        const res = await prisma.todo.update({
+            where: { id }, data: {
+                isSelected
+            }
+        })
+        return { res }
+    } catch (error) {
+        return ({ error })
+    }
+}
+
+export async function updateTodoExpand(id: string, isExpanded: boolean) {
+    try {
+        const res = await prisma.todo.update({
+            where: { id }, data: {
+                isExpanded: isExpanded
+            }
+        })
+        return { res }
+    } catch (error) {
+        return ({ error })
+    }
+}
+
+export async function updateTodoSelectAndResetRelation(id: string, isSelected: boolean) {
+    try {
+        const res = await prisma.todo.update({
+            where: { id }, data: {
+                isSelected,
+                parentId: null,
+
+            }
+        })
         return { res }
     } catch (error) {
         return ({ error })
@@ -473,23 +535,105 @@ export async function unselectAllTodo() {
     }
 }
 
+const hasChildren = (todo: any): boolean => {
+    if (todo.children !== null && todo.children.length > 0)
+        return true;
+    else
+        return false;
+}
+
+async function deleteChildTodo(todo: any) {
+    todo.children.array.forEach(async (child: any) => {
+        await prisma.todo.delete({
+            where: {
+                id: child.id,
+                isSelected: true,
+            },
+
+        })
+
+    })
+}
+
+async function setChildrenSelected() {
+    const selectedTodos = await getTodoSelected() as Array<Todo>;
+
+    if (selectedTodos.length === 0)
+        return;
+
+    console.log('selected Todos: ', JSON.stringify(selectedTodos, null, 2))
+
+    selectedTodos.forEach(async (todo: any) => {
+
+        if (hasChildren(todo)) {
+            // console.log('has children')
+
+            // setChildrenSelected(todo);
+
+
+            todo.children.forEach(async (child: any) => {
+                if (child.isSelected) {
+                    console.log('child selected')
+                    await prisma.todo.update({
+                        where: {
+                            id: child.id,
+                        },
+                        data: {
+                            parentId: null,
+                        }
+                    })
+                }
+                else {
+                    console.log('child not selected')
+                    const updated = await prisma.todo.update({
+                        where: {
+                            id: child.id,
+                        },
+                        data: {
+                            isSelected: false,
+                            parentId: null,
+                        }
+                    })
+
+                    console.log('updated child : ', JSON.stringify(updated, null, 2))
+                }
+            });
+            // console.log('parent:', JSON.stringify(todo, null, 2));
+
+            // await prisma.todo.delete({
+            //     where:{
+            //         id:todo.id,
+            //     }
+            // });
+
+        }
+
+    })
+}
+
 export async function deleteSelected() {
     try {
-        const todos = await prisma.todo.findMany({
-            where: {
-                isSelected: true,
-            }
-        })
-        // console.log('selected todos:', todos)
-        todos.forEach(async s => {
+        await setChildrenSelected();
+
+        const selectedTodos = await getTodoSelected() as Array<Todo>;
+
+        if (selectedTodos.length === 0)
+            return;
+
+        console.log('selected Todos: ', JSON.stringify(selectedTodos, null, 2))
+
+        selectedTodos.forEach(async (todo: any) => {
+
             await prisma.todo.delete({
                 where: {
-                    id: s.id
+                    id: todo.id,
                 }
-            })
+            });
+           
         })
 
     } catch (error) {
         return ({ error })
     }
 }
+

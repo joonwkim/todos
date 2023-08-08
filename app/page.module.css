@@ -1,7 +1,4 @@
-.todoCheckbox{
-  width: 16px;
-  height: 16px;
-}
+
 .registerError{
   font-size: 6pt;
   color:red;
@@ -9,4 +6,9 @@
 
 .toast{
   z-index: 11;
+}
+
+.todoCheckbox{
+  width: 16px;
+  height: 16px;
 }
