@@ -67,7 +67,7 @@ const TodoTable = (props: TodoProps) => {
         <h1>Todos</h1>
         <AddNewTodo todos={props.todos} selectedItems={props.selectedItems} />
         <p className='text-xl font-semibold border-b pb-2'><span className='fs-6'>-  check in the box when complete</span></p>
-        <table className="table table-fixed table-sm">
+        <table className="table table-fixed table-hover table-sm">
             <thead>
                 <tr>
                     <th className='col-1 ' >
