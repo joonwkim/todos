@@ -581,7 +581,7 @@ export async function deleteSelected() {
         if (selectedTodos.length === 0)
             return;
 
-        console.log('deleteSelected Selected Todos: ', JSON.stringify(selectedTodos, null, 2))
+        // console.log('deleteSelected Selected Todos: ', JSON.stringify(selectedTodos, null, 2))
 
         selectedTodos.forEach(async (todo: any) => {
             const result = await prisma.todo.delete({
