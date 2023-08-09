@@ -5,6 +5,8 @@ import { useEffect, useState, useTransition } from 'react';
 import { updateTodoCompleteAction, updateTodoExpandAction, updateTodoSelectAction } from '../../actions/todoAction'
 import Expander from '../controls/expander';
 import ChildTableItem from './todoChildren';
+import { useRouter } from "next/navigation";
+
 type Temp = {
     id: string,
     title: string,
@@ -18,6 +20,7 @@ const TodoTableItem = (props: TodoItemProps) => {
 
     const [isPending, startTransition] = useTransition()
     const [selectStatus, setSelectStatus] = useState(false);
+    const router = useRouter()
 
     useEffect(() => {
         window.addEventListener("click", () => setSelectStatus(false))
@@ -56,30 +59,30 @@ const TodoTableItem = (props: TodoItemProps) => {
         e.preventDefault()
         e.stopPropagation();
         startTransition(() => updateTodoExpandAction(props.todo.id, !props.todo.isExpanded))
-
+        router.push('/todos/?orderBy=asc&&propertyName=title');
     }
     const hasParent = (todo: any) => {
         return todo.parent !== null;
     }
 
     return (<>
-
         <tr className={getBgColor()} onClick={(e) => handleSelection(e)} >
             <td>
                 {hasChildren(props.todo) ? (
                     <span onClick={onExpand}>
                         <Expander isExpand={props.todo.isExpanded} />
                     </span>
-                ) : hasParent(props.todo) ? <div className='ms-4'><input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted'
-                    onChange={(e) => startTransition(() =>
-                        updateTodoCompleteAction(props.todo, e.target.checked))}
-                    defaultChecked={props.todo.isCompleted} /></div> : (
-                    <input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted'
+                ) : hasParent(props.todo) ?
+                    <div className='ms-4'><input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted'
                         onChange={(e) => startTransition(() =>
                             updateTodoCompleteAction(props.todo, e.target.checked))}
                         defaultChecked={props.todo.isCompleted} />
-
-                )}
+                    </div> : (
+                        <input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted'
+                            onChange={(e) => startTransition(() =>
+                                updateTodoCompleteAction(props.todo, e.target.checked))}
+                            defaultChecked={props.todo.isCompleted} />
+                    )}
             </td>
 
             {/* <td>
