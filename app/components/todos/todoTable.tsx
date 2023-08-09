@@ -67,16 +67,15 @@ const TodoTable = (props: TodoProps) => {
         <h1>Todos</h1>
         <AddNewTodo todos={props.todos} selectedItems={props.selectedItems} />
         <p className='text-xl font-semibold border-b pb-2'><span className='fs-6'>-  check in the box when complete</span></p>
-        <table className="table">
+        <table className="table table-fixed table-sm">
             <thead>
                 <tr>
-                    <th scope="col-1">
+                    <th className='col-1 ' >
                         <input type="checkbox" className={styles.todoCheckbox} name="isCompleted" title='isCompleted' id='todoCheckBox'
                             onChange={handleChecked}
                             defaultChecked={checked} />
-                    </th>
-                    <th scope="col-2"></th>
-                    <th scope="col-3">
+                    </th>                  
+                    <th className='col-5'>
                         <div onClick={handleOrderByTitle} className='d-flex' >
                             항목
                             <div className='ms-2'>
@@ -92,7 +91,7 @@ const TodoTable = (props: TodoProps) => {
                             </div>
                         </div>
                     </th>
-                    <th scope="col-4">
+                    <th className="col-3">
                         <div onClick={handleOrderByCreatedAt} className='d-flex' >
                             시작
                             <div className='ms-2'>
@@ -108,7 +107,7 @@ const TodoTable = (props: TodoProps) => {
                             </div>
                         </div>
                     </th>
-                    <th scope="col-5">완료</th>
+                    <th className="col-3">완료</th>
                 </tr>
             </thead>
             <tbody>
