@@ -115,7 +115,7 @@ const AddNewTodo = (props: TodoProps) => {
   }
 
   const handleDeleteSelected = async () => {
-    console.log('selected items: ', JSON.stringify(props.selectedItems, null, 2))
+    // console.log('selected items: ', JSON.stringify(props.selectedItems, null, 2))
     if (props.selectedItems.length === 0) {
       toast.info('삭제하고자 하는 항목을 선택하세요')
     }
@@ -123,7 +123,6 @@ const AddNewTodo = (props: TodoProps) => {
       const result = confirm('선택된 항목을 삭제합니다.')
       if (result) {
         startTransition(() => { deleteSelectedAction()})
-       
         router.push('/todos/?orderBy=asc&&propertyName=title');
       }
     }

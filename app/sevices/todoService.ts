@@ -551,7 +551,7 @@ export async function setParentDisconnected() {
     const selectedTodos = await getTodoSelected() as Array<Todo>;
     if (selectedTodos.length === 0)
         return;
-        console.log('setParentDisconnected: ', JSON.stringify(selectedTodos, null, 2))
+        // console.log('setParentDisconnected: ', JSON.stringify(selectedTodos, null, 2))
     selectedTodos.forEach(async (todo: any) => {
         try {
             if (hasChildren(todo)) {
@@ -568,7 +568,7 @@ export async function setParentDisconnected() {
                 });
             }
         } catch (error) {
-            console.log('updated Todos setParentDisconnected: ', JSON.stringify(error, null, 2))
+            console.log('updated Todos setParentDisconnected error: ', JSON.stringify(error, null, 2))
         }
     })
 }
